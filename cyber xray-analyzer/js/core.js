@@ -417,7 +417,7 @@ async function fetchVirusTotal(urlOrDomain) {
 
   const form = new FormData();
   form.append('url', normalized);
-  const subRes = await fetch('https://sweet-brook-a95f.boodymahmody200.workers.dev/.dev/api/virustotal' ,{
+  const subRes = await fetch('https://cyber0xray.boodymahmody200.workers.dev/api/virustotal' ,{
 // (مع وضع مسار الطلب الصحيح حسب ما برمجت الـ Worker), {
     method: 'POST', headers: { 'x-apikey': apiKey }, body: form,
     signal: AbortSignal.timeout(15000)
