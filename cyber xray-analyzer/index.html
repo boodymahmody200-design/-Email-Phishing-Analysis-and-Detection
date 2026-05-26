@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Cyber X-Ray — Security Intelligence Platform</title>
+<link rel="stylesheet" href="css/style.css"/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
+
+<!-- Mobile Top Bar -->
+<div class="mobile-topbar">
+  <div class="mobile-logo">⚡ Cyber X-Ray</div>
+  <span id="mobile-page-title" style="font-size:12px;color:var(--text2);flex:1;text-align:center;padding:0 8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span>
+  <button class="hamburger" id="hamburger" aria-label="Open menu" type="button">
+    <span></span><span></span><span></span>
+  </button>
+</div>
+
+<!-- Sidebar Overlay (mobile) -->
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+<div class="page layout">
+
+<!-- ══ SIDEBAR ══ -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-wrap">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/><path d="M11 8v6M8 11h6"/></svg>
+      </div>
+      <div>
+        <div class="logo-text">Cyber X-Ray</div>
+        <div class="logo-sub">Security Intelligence</div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+
+    <!-- Overview -->
+    <div class="nav-group">
+      <span class="nav-label">Overview</span>
+      <a class="nav-item active" data-page="dashboard" onclick="XRay.navigate('dashboard')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+        Dashboard
+      </a>
+    </div>
+
+    <!-- Primary Tools -->
+    <div class="nav-group">
+      <span class="nav-label">Quick Scan</span>
+      <a class="nav-item" data-page="url" onclick="XRay.navigate('url')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        Full Website Scan
+        <span class="nav-badge badge-hot">All-in-1</span>
+      </a>
+      <a class="nav-item" data-page="email" onclick="XRay.navigate('email')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+        Email Analyzer
+      </a>
+      <a class="nav-item" data-page="virustotal" onclick="XRay.navigate('virustotal')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Virus & Blacklist Check
+      </a>
+      <a class="nav-item" data-page="screenshot" onclick="XRay.navigate('screenshot')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        Safe Site Preview
+      </a>
+    </div>
+
+    <!-- Domain Tools -->
+    <div class="nav-group">
+      <span class="nav-label">Domain Investigation</span>
+      <a class="nav-item" data-page="whois" onclick="XRay.navigate('whois')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        Who Owns This Domain?
+      </a>
+      <a class="nav-item" data-page="dns" onclick="XRay.navigate('dns')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 17H7A5 5 0 0 1 7 7h2"/><path d="M15 7h2a5 5 0 0 1 0 10h-2"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+        DNS Records Lookup
+      </a>
+      <a class="nav-item" data-page="network" onclick="XRay.navigate('network')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="3"/><circle cx="5" cy="19" r="3"/><circle cx="19" cy="19" r="3"/><path d="M12 8v3m0 0-5 5m5-5 5 5"/></svg>
+        Network & Subdomains <span class="nav-badge badge-new">New</span>
+      </a>
+      <a class="nav-item" data-page="geo" onclick="XRay.navigate('geo')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        Trace Server Location
+      </a>
+
+    </div>
+
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="user-card">
+      <div class="user-name" id="sb-name">Loading…</div>
+      <div class="user-role" id="sb-role-txt"></div>
+    </div>
+    <button class="btn-logout" onclick="handleLogout()">↩ Sign Out</button>
+  </div>
+</aside>
+
+<!-- ══ MAIN ══ -->
+<main class="main">
+  <div class="topbar">
+    <span id="topbar-title" class="topbar-title">Dashboard</span>
+    <div class="topbar-right">
+      <button onclick="exportPDF()" id="export-pdf-btn" class="btn btn-ghost btn-sm">
+        ⬇ Export PDF
+      </button>
+      <div class="status-pill"><span class="status-dot"></span>System Online</div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ══════════════════════════════════════════════════
+         DASHBOARD
+    ══════════════════════════════════════════════════ -->
+    <div class="pg" id="pg-dashboard">
+      <div style="margin-bottom:28px">
+        <div style="font-size:24px;font-weight:800;letter-spacing:-0.5px;margin-bottom:6px">
+          Welcome back, <span id="dash-name" style="background:linear-gradient(135deg,#3b82f6,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">—</span> 👋
+        </div>
+        <div style="color:var(--text2);font-size:14px">Cyber X-Ray — 9 security tools in one dashboard. Start with a scan below.</div>
+      </div>
+
+      <!-- Stats -->
+      <div class="result-grid" style="margin-bottom:28px">
+        <div class="stat-card" style="border-left:3px solid var(--danger)">
+          <div class="stat-card-label">Phishing Emails / Day</div>
+          <div class="stat-card-value" style="color:var(--danger)">3.4B</div>
+          <div class="stat-card-sub">Sent globally every day</div>
+        </div>
+        <div class="stat-card" style="border-left:3px solid var(--warning)">
+          <div class="stat-card-label">Breaches via Phishing</div>
+          <div class="stat-card-value" style="color:var(--warning)">36%</div>
+          <div class="stat-card-sub">Of all data breaches</div>
+        </div>
+        <div class="stat-card" style="border-left:3px solid var(--accent)">
+          <div class="stat-card-label">Your Scans</div>
+          <div class="stat-card-value" id="dash-scans" style="color:var(--accent)">—</div>
+          <div class="stat-card-sub">Total analyses run</div>
+        </div>
+        <div class="stat-card" style="border-left:3px solid var(--safe)">
+          <div class="stat-card-label">Analysis Tools</div>
+          <div class="stat-card-value" style="color:var(--safe)">9</div>
+          <div class="stat-card-sub">All in one place</div>
+        </div>
+      </div>
+
+      <!-- Quick Access -->
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);margin-bottom:14px">Most Used Tools</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px">
+
+        <div class="panel" style="cursor:pointer;transition:border-color 0.2s,transform 0.15s" onmouseenter="this.style.borderColor='rgba(59,130,246,0.4)';this.style.transform='translateY(-2px)'" onmouseleave="this.style.borderColor='';this.style.transform=''" onclick="XRay.navigate('url')">
+          <div class="panel-header">
+            <div class="panel-icon" style="background:linear-gradient(135deg,rgba(59,130,246,0.2),rgba(139,92,246,0.2))">
+              <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            </div>
+            <div>
+              <div class="panel-title">Full Website Scan</div>
+              <div class="panel-desc">WHOIS + DNS + Location + Analysis</div>
+            </div>
+          </div>
+          <div class="panel-body" style="font-size:13px;color:var(--text2)">
+            Paste any suspicious link and get a complete security report in seconds — no technical knowledge needed.
+          </div>
+        </div>
+
+        <div class="panel" style="cursor:pointer;transition:border-color 0.2s,transform 0.15s" onmouseenter="this.style.borderColor='rgba(139,92,246,0.4)';this.style.transform='translateY(-2px)'" onmouseleave="this.style.borderColor='';this.style.transform=''" onclick="XRay.navigate('email')">
+          <div class="panel-header">
+            <div class="panel-icon" style="background:rgba(139,92,246,0.15)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+            </div>
+            <div>
+              <div class="panel-title">Email Header Analyzer</div>
+              <div class="panel-desc">Detect spoofed senders, SPF/DKIM/DMARC</div>
+            </div>
+          </div>
+          <div class="panel-body" style="font-size:13px;color:var(--text2)">
+            Paste raw email headers to trace sender routing, verify authentication (SPF/DKIM/DMARC), and detect spoofing.
+          </div>
+        </div>
+
+        <div class="panel" style="cursor:pointer;transition:border-color 0.2s,transform 0.15s" onmouseenter="this.style.borderColor='rgba(16,185,129,0.4)';this.style.transform='translateY(-2px)'" onmouseleave="this.style.borderColor='';this.style.transform=''" onclick="XRay.navigate('network')">
+          <div class="panel-header">
+            <div class="panel-icon" style="background:rgba(16,185,129,0.12)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="var(--safe)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="3"/><circle cx="5" cy="19" r="3"/><circle cx="19" cy="19" r="3"/><path d="M12 8v3m0 0-5 5m5-5 5 5"/></svg>
+            </div>
+            <div>
+              <div class="panel-title">Network & Subdomains</div>
+              <div class="panel-desc">Full infrastructure map</div>
+            </div>
+          </div>
+          <div class="panel-body" style="font-size:13px;color:var(--text2)">
+            Find hidden subdomains, linked servers, network ranges, and mail infrastructure behind any domain.
+          </div>
+        </div>
+
+        <div class="panel" style="cursor:pointer;transition:border-color 0.2s,transform 0.15s" onmouseenter="this.style.borderColor='rgba(245,158,11,0.4)';this.style.transform='translateY(-2px)'" onmouseleave="this.style.borderColor='';this.style.transform=''" onclick="XRay.navigate('virustotal')">
+          <div class="panel-header">
+            <div class="panel-icon" style="background:rgba(245,158,11,0.12)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="var(--warning)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <div>
+              <div class="panel-title">Virus & Blacklist Check</div>
+              <div class="panel-desc">90+ security engines</div>
+            </div>
+          </div>
+          <div class="panel-body" style="font-size:13px;color:var(--text2)">
+            Check any URL against 90+ antivirus engines including Kaspersky, Google Safe Browsing, and Bitdefender.
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════
+         FULL WEBSITE SCAN
+    ══════════════════════════════════════════════════ -->
+    <div class="pg" id="pg-url" style="display:none">
+      <div class="panel" style="margin-bottom:20px">
+        <div class="panel-header">
+          <div class="panel-icon" style="background:linear-gradient(135deg,rgba(59,130,246,0.2),rgba(139,92,246,0.2))">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          </div>
+          <div>
+            <div class="panel-title">Full Website Scan</div>
+            <div class="panel-desc">Enter any suspicious link — we run all checks at once and show you if it's safe</div>
+          </div>
+        </div>
+        <div class="panel-body">
+          <label class="input-label">Paste Suspicious Link or Website Address</label>
+          <div class="input-row">
+            <input type="url" id="url-scan-input" placeholder="e.g. http://paypal-verify-secure.xyz/login" autocomplete="off" spellcheck="false"/>
+            <button class="btn btn-primary" id="full-scan-btn" onclick="runFullScan()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+              Scan Now
+            </button>
+          </div>
+          <div style="font-size:12px;color:var(--muted);margin-top:8px">
+            💡 Runs: Virus &amp; Blacklist Check (90+ engines) · Domain Age · DNS Lookup · Server Location — all simultaneously
+          </div>
+        </div>
+      </div>
+
+      <!-- VirusTotal spans full width — first result -->
+      <div class="panel" style="margin-bottom:16px">
+        <div class="panel-header">
+          <div class="panel-icon" style="background:rgba(245,158,11,0.15)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--warning)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg></div>
+          <div>
+            <div class="panel-title">Virus &amp; Blacklist Check</div>
+            <div class="panel-desc">Checked against 90+ security engines — Kaspersky, Google Safe Browsing, Bitdefender &amp; more</div>
+          </div>
+        </div>
+        <div class="panel-body"><div id="scan-vt"></div></div>
+      </div>
+
+      <div class="scan-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <!-- Domain Age & Owner -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+            <div>
+              <div class="panel-title">Domain Age &amp; Owner</div>
+              <div class="panel-desc">How old is this domain? Who registered it?</div>
+            </div>
+          </div>
+          <div class="panel-body"><div id="scan-whois"></div></div>
+        </div>
+
+        <!-- DNS Records -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--info)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 17H7A5 5 0 0 1 7 7h2"/><path d="M15 7h2a5 5 0 0 1 0 10h-2"/><line x1="8" y1="12" x2="16" y2="12"/></svg></div>
+            <div>
+              <div class="panel-title">DNS Records</div>
+              <div class="panel-desc">What IP address does this link to?</div>
+            </div>
+          </div>
+          <div class="panel-body"><div id="scan-dns"></div></div>
+        </div>
+
+        <!-- Server Location -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-icon" style="background:rgba(239,68,68,0.12)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+            <div>
+              <div class="panel-title">Server Location</div>
+              <div class="panel-desc">Where in the world is this server?</div>
+            </div>
+          </div>
+          <div class="panel-body"><div id="scan-geo"></div></div>
+        </div>
+
+        <!-- IP Reputation -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-icon" style="background:rgba(139,92,246,0.12)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+            <div>
+              <div class="panel-title">IP Reputation</div>
+              <div class="panel-desc">Is the server IP flagged as malicious?</div>
+            </div>
+          </div>
+          <div class="panel-body"><div id="scan-iprep"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════
+         EMAIL ANALYZER — SOC Tools Powered
+    ══════════════════════════════════════════════════ -->
+    <div class="pg" id="pg-email" style="display:none">
+      <div class="panel" style="margin-bottom:16px">
+        <div class="panel-header">
+          <div class="panel-icon" style="background:rgba(139,92,246,0.15)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+          </div>
+          <div>
+            <div class="panel-title">Email Analyzer</div>
+            <div class="panel-desc">Paste raw email headers — we run live SOC checks: SPF/DKIM/DMARC DNS lookup, sender IP reputation via VirusTotal, and URL scanning on all links found</div>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="flag flag-info" style="margin-bottom:14px">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;flex-shrink:0"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            <span>In Gmail: open email → ⋮ → Show original. In Outlook: File → Properties. Copy the full headers and paste below.</span>
+          </div>
+          <label class="input-label">Paste Full Email Headers</label>
+          <textarea id="email-header-input" autocomplete="off" spellcheck="false" style="min-height:200px;font-family:var(--mono);font-size:12px" placeholder="Delivered-To: victim@gmail.com&#10;Received: from mail.suspicious.xyz (mail.suspicious.xyz [185.220.101.45])&#10;        by mx.google.com with ESMTP&#10;Authentication-Results: mx.google.com;&#10;       spf=fail (sender IP is 185.220.101.45)&#10;       dkim=fail&#10;       dmarc=fail&#10;From: &quot;PayPal Security&quot; &lt;support@paypa1-secure.xyz&gt;&#10;To: victim@gmail.com&#10;Subject: Urgent: Your account has been suspended&#10;Date: Mon, 20 May 2026 09:14:22 +0000&#10;Message-ID: &lt;abc123@mail.suspicious.xyz&gt;"></textarea>
+          <button class="btn btn-primary btn-full" style="margin-top:12px" onclick="runEmailSOCAnalysis()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+            Run SOC Analysis
+          </button>
+        </div>
+      </div>
+
+      <!-- Results grid: auth checks top row, then URL scan, then IP rep, then routing -->
+      <div id="email-soc-results" style="display:none">
+        <!-- Row 1: Auth results full width -->
+        <div class="panel" style="margin-bottom:16px">
+          <div class="panel-header">
+            <div class="panel-icon" style="background:rgba(59,130,246,0.12)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </div>
+            <div>
+              <div class="panel-title">Authentication &amp; Header Checks</div>
+              <div class="panel-desc">SPF · DKIM · DMARC parsed from headers + live DNS verification of sender domain</div>
+            </div>
+          </div>
+          <div class="panel-body"><div id="email-auth-result"></div></div>
+        </div>
+
+        <!-- Row 2: IP Reputation + Sender Domain side by side -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-icon" style="background:rgba(239,68,68,0.1)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              </div>
+              <div>
+                <div class="panel-title">Sender IP Reputation</div>
+                <div class="panel-desc">VirusTotal check on originating IP</div>
+              </div>
+            </div>
+            <div class="panel-body"><div id="email-ip-result"></div></div>
+          </div>
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-icon" style="background:rgba(139,92,246,0.12)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+              </div>
+              <div>
+                <div class="panel-title">Sender Domain WHOIS</div>
+                <div class="panel-desc">Domain age &amp; registration info</div>
+              </div>
+            </div>
+            <div class="panel-body"><div id="email-domain-result"></div></div>
+          </div>
+        </div>
+
+        <!-- Row 3: URLs found in headers scanned via VT -->
+        <div class="panel" style="margin-bottom:16px">
+          <div class="panel-header">
+            <div class="panel-icon" style="background:rgba(245,158,11,0.12)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="var(--warning)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+            </div>
+            <div>
+              <div class="panel-title">URL &amp; Link Scan (VirusTotal)</div>
+              <div class="panel-desc">All URLs extracted from headers checked against 90+ security engines</div>
+            </div>
+          </div>
+          <div class="panel-body"><div id="email-url-result"></div></div>
+        </div>
+
+        <!-- Row 4: Routing path full width -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-icon" style="background:rgba(16,185,129,0.1)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="var(--safe)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            </div>
+            <div>
+              <div class="panel-title">Email Routing Path</div>
+              <div class="panel-desc">Hop-by-hop server trace from sender to inbox</div>
+            </div>
+          </div>
+          <div class="panel-body"><div id="email-routing-result"></div></div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ══════════════════════════════════════════════════
+         WHO OWNS THIS DOMAIN?
+    ══════════════════════════════════════════════════ -->
+    <div class="pg" id="pg-whois" style="display:none">
+      <div class="panel" style="margin-bottom:16px">
+        <div class="panel-header">
+          <div class="panel-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+          <div>
+            <div class="panel-title">Who Owns This Domain?</div>
+            <div class="panel-desc">Find out who registered a website, when, and how old it is — new domains are a red flag</div>
+          </div>
+        </div>
+        <div class="panel-body">
+          <label class="input-label">Website Address or Domain</label>
+          <div class="input-row">
+            <input type="text" id="whois-input" autocomplete="off" spellcheck="false" placeholder="e.g. suspicious-domain.xyz or https://fake-bank.com"/>
+            <button class="btn btn-primary" onclick="runWHOIS()">Look Up</button>
+          </div>
+        </div>
+      </div>
+      <div class="panel"><div class="panel-body"><div id="whois-result"></div></div></div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════
+         DNS RECORDS LOOKUP
+    ══════════════════════════════════════════════════ -->
+    <div class="pg" id="pg-dns" style="display:none">
+      <div class="panel" style="margin-bottom:16px">
+        <div class="panel-header">
+          <div class="panel-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--info)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 17H7A5 5 0 0 1 7 7h2"/><path d="M15 7h2a5 5 0 0 1 0 10h-2"/><line x1="8" y1="12" x2="16" y2="12"/></svg></div>
+          <div>
+            <div class="panel-title">DNS Records Lookup</div>
+            <div class="panel-desc">See the technical records behind any domain — IP addresses, mail servers, and more</div>
+          </div>
+        </div>
+        <div class="panel-body">
+          <label class="input-label">Website Address or Domain</label>
+          <div class="input-row">
+            <input type="text" id="dns-input" autocomplete="off" spellcheck="false" placeholder="suspicious-domain.xyz"/>
+            <select id="dns-type">
+              <option value="A">A — IP Address</option>
+              <option value="MX">MX — Mail Server</option>
+              <option value="TXT">TXT — SPF / DMARC</option>
+              <option value="NS">NS — Name Server</option>
+              <option value="CNAME">CNAME — Alias</option>
+              <option value="AAAA">AAAA — IPv6</option>
+              <option value="SOA">SOA — Zone Info</option>
+            </select>
+            <button class="btn btn-primary" onclick="runDNS()">Query</button>
+          </div>
+        </div>
+      </div>
+      <div class="panel"><div class="panel-body"><div id="dns-result"></div></div></div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════
+         NETWORK & SUBDOMAINS
+    ══════════════════════════════════════════════════ -->
+    <div class="pg" id="pg-network" style="display:none">
+      <div class="panel" style="margin-bottom:16px">
+        <div class="panel-header">
+          <div class="panel-icon" style="background:rgba(16,185,129,0.12)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--safe)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="3"/><circle cx="5" cy="19" r="3"/><circle cx="19" cy="19" r="3"/><path d="M12 8v3m0 0-5 5m5-5 5 5"/></svg>
+          </div>
+          <div>
+            <div class="panel-title">Network & Subdomains</div>
+            <div class="panel-desc">Discovers hidden pages, linked servers, network ranges, and email infrastructure</div>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="flag flag-info" style="margin-bottom:14px">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;flex-shrink:0"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            <span>Probes 10 common subdomains, maps the IP network range, checks nameservers, mail servers, and email security (SPF/DMARC).</span>
+          </div>
+          <label class="input-label">Website Address or Domain</label>
+          <div class="input-row">
+            <input type="text" id="network-input" autocomplete="off" spellcheck="false" placeholder="suspicious-domain.xyz or https://fake-bank.com"/>
+            <button class="btn btn-primary" onclick="runNetwork()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px"><circle cx="12" cy="5" r="3"/><circle cx="5" cy="19" r="3"/><circle cx="19" cy="19" r="3"/><path d="M12 8v3m0 0-5 5m5-5 5 5"/></svg>
+              Analyze
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="panel"><div class="panel-body"><div id="network-result"></div></div></div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════
+         TRACE SERVER LOCATION
+    ══════════════════════════════════════════════════ -->
+    <div class="pg" id="pg-geo" style="display:none">
+      <div class="panel" style="margin-bottom:16px">
+        <div class="panel-header">
+          <div class="panel-icon" style="background:rgba(239,68,68,0.12)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <div>
+            <div class="panel-title">Trace Server Location</div>
+            <div class="panel-desc">Find out which country a website or IP address is hosted in — shows on an interactive map</div>
+          </div>
+        </div>
+        <div class="panel-body">
+          <label class="input-label">IP Address or Website Address</label>
+          <div class="input-row">
+            <input type="text" id="geo-input" autocomplete="off" spellcheck="false" placeholder="185.220.101.45 or suspicious-site.xyz"/>
+            <button class="btn btn-primary" onclick="runGeo()">Trace</button>
+          </div>
+        </div>
+      </div>
+      <div class="panel"><div class="panel-body"><div id="geo-result"></div></div></div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════
+         SSL CERTIFICATE CHECK
+    ══════════════════════════════════════════════════ -->
+    <div class="pg" id="pg-ssl" style="display:none">
+      <div class="panel" style="margin-bottom:16px">
+        <div class="panel-header">
+          <div class="panel-icon" style="background:rgba(16,185,129,0.12)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--safe)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </div>
+          <div>
+            <div class="panel-title">SSL Certificate Check</div>
+            <div class="panel-desc">Is this website's security certificate valid? Checks TLS grade (A to F) and expiry date</div>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="flag flag-info" style="margin-bottom:14px">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;flex-shrink:0"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            <span>This check takes 30–90 seconds. The website must be publicly accessible.</span>
+          </div>
+          <label class="input-label">Website Address (no https://)</label>
+          <div class="input-row">
+            <input type="text" id="ssl-input" autocomplete="off" spellcheck="false" placeholder="suspicious-bank-login.com"/>
+            <button class="btn btn-primary" onclick="runSSL()">Check</button>
+          </div>
+        </div>
+      </div>
+      <div class="panel"><div class="panel-body"><div id="ssl-result"></div></div></div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════
+         VIRUS & BLACKLIST CHECK
+    ══════════════════════════════════════════════════ -->
+    <div class="pg" id="pg-virustotal" style="display:none">
+      <div class="panel" style="margin-bottom:16px">
+        <div class="panel-header">
+          <div class="panel-icon" style="background:rgba(245,158,11,0.12)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--warning)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <div>
+            <div class="panel-title">Virus & Blacklist Check</div>
+            <div class="panel-desc">Checks the link against 90+ antivirus and threat databases — includes Google Safe Browsing, Kaspersky, Bitdefender</div>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="flag flag-safe" style="margin-bottom:14px">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;flex-shrink:0"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+            <span>Ready to scan — no setup needed. Just paste the link below.</span>
+          </div>
+          <label class="input-label">Suspicious Link to Check</label>
+          <div class="input-row">
+            <input type="url" id="vt-input" autocomplete="off" spellcheck="false" placeholder="http://malicious-bank.xyz/login"/>
+            <button class="btn btn-primary" onclick="runVT()">Scan Link</button>
+          </div>
+        </div>
+      </div>
+      <div class="panel"><div class="panel-body"><div id="vt-result"></div></div></div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════
+         SAFE SITE PREVIEW (Screenshot)
+    ══════════════════════════════════════════════════ -->
+    <div class="pg" id="pg-screenshot" style="display:none">
+      <div class="panel" style="margin-bottom:16px">
+        <div class="panel-header">
+          <div class="panel-icon" style="background:rgba(16,185,129,0.12)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--safe)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          </div>
+          <div>
+            <div class="panel-title">Safe Site Preview</div>
+            <div class="panel-desc">See what a suspicious website looks like — without opening it or putting yourself at risk</div>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="flag flag-safe" style="margin-bottom:14px">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;flex-shrink:0"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+            <span><b>100% Safe:</b> A remote computer visits the link and sends you only a screenshot image. Your device never connects to the suspicious site.</span>
+          </div>
+          <label class="input-label">Suspicious Link to Preview</label>
+          <div class="input-row">
+            <input type="url" id="ss-input" autocomplete="off" spellcheck="false" placeholder="http://paypal-verify-secure.xyz/login"/>
+            <button class="btn btn-primary" id="ss-btn" onclick="runScreenshot()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              Preview Site
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="panel"><div class="panel-body"><div id="ss-result"></div></div></div>
+    </div>
+
+  </div><!-- .content -->
+</main>
+</div><!-- .layout -->
+
+<script src="js/core.js"></script>
+<script src="js/modules.js"></script>
+
+<!-- ── Mobile sidebar (plain script, runs immediately) ── -->
+<script>
+// Sidebar state — works independently of module loading
+var CXR = {
+  sidebarOpen: false,
+  open: function() {
+    var sb = document.getElementById('sidebar');
+    var ov = document.getElementById('sidebar-overlay');
+    var hm = document.getElementById('hamburger');
+    if (sb) sb.classList.add('open');
+    if (ov) ov.classList.add('open');
+    if (hm) hm.setAttribute('aria-label','Close menu');
+    document.body.style.overflow = 'hidden';
+    this.sidebarOpen = true;
+  },
+  close: function() {
+    var sb = document.getElementById('sidebar');
+    var ov = document.getElementById('sidebar-overlay');
+    var hm = document.getElementById('hamburger');
+    if (sb) sb.classList.remove('open');
+    if (ov) ov.classList.remove('open');
+    if (hm) hm.setAttribute('aria-label','Open menu');
+    document.body.style.overflow = '';
+    this.sidebarOpen = false;
+  },
+  toggle: function() {
+    if (this.sidebarOpen) this.close(); else this.open();
+  }
+};
+
+// Init as soon as DOM is ready
+function _cyberXRayInit() {
+  var ham = document.getElementById('hamburger');
+  var ov  = document.getElementById('sidebar-overlay');
+
+  if (ham) {
+    ham.onclick = function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      CXR.toggle();
+    };
+  }
+
+  if (ov) {
+    ov.onclick = function() { CXR.close(); };
+  }
+
+  // Close sidebar when pressing Escape
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') CXR.close();
+  });
+
+  // Handle window resize — close sidebar if going to desktop
+  window.addEventListener('resize', function() {
+    if (window.innerWidth >= 768) CXR.close();
+  });
+}
+
+// Run immediately if DOM ready, else wait
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', _cyberXRayInit);
+} else {
+  _cyberXRayInit();
+}
+</script>
+
+<script type="module">
+  import { onAuth, logout } from './js/firebase.js';
+
+  // ── Auth ──
+  onAuth(user => {
+    if (!user) { window.location.href = 'login.html'; return; }
+    window.__currentUser = user;
+    const name = `${user.firstName||''} ${user.lastName||''}`.trim() || user.email;
+    const el = document.getElementById('sb-name');
+    if (el) el.textContent = name;
+    const rolEl = document.getElementById('sb-role-txt');
+    if (rolEl) rolEl.textContent = user.role === 'admin' ? '👑 Admin' : '🔒 Client';
+    const dn = document.getElementById('dash-name');
+    if (dn) dn.textContent = user.firstName || name.split(' ')[0];
+    const ds = document.getElementById('dash-scans');
+    if (ds) ds.textContent = user.scanCount || 0;
+  });
+
+  window.handleLogout = async () => { await logout(); window.location.href = 'login.html'; };
+
+  // ── Init empty states ──
+  ['scan-whois','scan-dns','scan-geo','scan-ai',
+   'whois-result','dns-result','geo-result','ssl-result',
+   'vt-result','analyzer-result','ss-result','network-result'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = renderEmpty();
+  });
+
+  // ── Enter key ──
+  document.querySelectorAll('input[type=text],input[type=url]').forEach(inp => {
+    inp.addEventListener('keydown', e => {
+      if (e.key !== 'Enter') return;
+      const pg = XRay.currentPage;
+      if (pg === 'whois')           runWHOIS();
+      else if (pg === 'dns')        runDNS();
+      else if (pg === 'geo')        runGeo();
+      else if (pg === 'ssl')        runSSL();
+      else if (pg === 'url')        runFullScan();
+      else if (pg === 'virustotal') runVT();
+      else if (pg === 'network')    runNetwork();
+      else if (pg === 'email') {
+        const t = document.querySelector('#pg-email .tab-panel.active');
+        if (t?.id === 'tab-email')    runContentAnalyzer('emailbody');
+        else if (t?.id === 'tab-sms') runContentAnalyzer('sms');
+        else if (t?.id === 'tab-url') runContentAnalyzer('url');
+      }
+    });
+  });
+</script>
+
+<!-- ── Animated Network Background ── -->
+<canvas id="network-bg"></canvas>
+<script>
+(function(){
+  const canvas = document.getElementById('network-bg');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let W, H, nodes = [], animId;
+  const NODE_COUNT = 42, MAX_DIST = 160, NODE_SPEED = 0.25;
+
+  function resize() {
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+
+  function initNodes() {
+    nodes = Array.from({length: NODE_COUNT}, () => ({
+      x: Math.random() * W, y: Math.random() * H,
+      vx: (Math.random()-0.5)*NODE_SPEED,
+      vy: (Math.random()-0.5)*NODE_SPEED,
+      r:  Math.random()*1.8+0.8,
+      pulse: Math.random()*Math.PI*2,
+    }));
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    const t = Date.now() * 0.001;
+
+    // Move nodes
+    nodes.forEach(n => {
+      n.x += n.vx; n.y += n.vy;
+      if (n.x < 0) n.x = W; if (n.x > W) n.x = 0;
+      if (n.y < 0) n.y = H; if (n.y > H) n.y = 0;
+      n.pulse += 0.018;
+    });
+
+    // Draw connections
+    for (let i = 0; i < nodes.length; i++) {
+      for (let j = i+1; j < nodes.length; j++) {
+        const dx = nodes[i].x - nodes[j].x;
+        const dy = nodes[i].y - nodes[j].y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < MAX_DIST) {
+          const alpha = (1 - dist/MAX_DIST) * 0.18;
+          ctx.beginPath();
+          ctx.moveTo(nodes[i].x, nodes[i].y);
+          ctx.lineTo(nodes[j].x, nodes[j].y);
+          ctx.strokeStyle = `rgba(59,130,246,${alpha})`;
+          ctx.lineWidth = 0.7;
+          ctx.stroke();
+        }
+      }
+    }
+
+    // Draw nodes
+    nodes.forEach(n => {
+      const pulse = Math.sin(n.pulse) * 0.4 + 0.7;
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, n.r * pulse, 0, Math.PI*2);
+      ctx.fillStyle = `rgba(99,130,246,${0.5 * pulse})`;
+      ctx.fill();
+      // Glow ring on random nodes
+      if (n.r > 2) {
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, n.r * 3, 0, Math.PI*2);
+        ctx.strokeStyle = `rgba(59,130,246,${0.08 * pulse})`;
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      }
+    });
+
+    animId = requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('resize', () => { resize(); });
+  resize();
+  initNodes();
+  draw();
+})();
+</script>
+</body>
+</html>

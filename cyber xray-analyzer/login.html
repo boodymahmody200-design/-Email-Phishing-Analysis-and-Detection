@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Cyber X-Ray — Sign In</title>
+<link rel="stylesheet" href="css/style.css"/>
+<style>
+.auth-wrap {
+  min-height: 100vh; display: grid;
+  grid-template-columns: 1fr 480px;
+}
+@media(max-width:900px){ .auth-wrap{ grid-template-columns:1fr; } .auth-left{ display:none; } }
+
+/* ── Left: branding panel ── */
+.auth-left {
+  background: linear-gradient(145deg, #0d1117 0%, #0f1623 60%, #111827 100%);
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  padding: 48px; position: relative; overflow: hidden;
+}
+.auth-left::before {
+  content:''; position:absolute; inset:0;
+  background-image:
+    linear-gradient(rgba(79,142,247,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(79,142,247,0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+.auth-left-inner { position:relative; z-index:1; flex:1; display:flex; flex-direction:column; }
+.left-logo { font-family:var(--heading); font-size:26px; font-weight:800; letter-spacing:-1px;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  margin-bottom: 6px;
+}
+.left-tag { font-size:13px; color:var(--muted); margin-bottom:48px; }
+.left-headline { font-family:var(--heading); font-size:32px; font-weight:800; letter-spacing:-1px;
+  line-height:1.15; margin-bottom:20px;
+}
+.left-headline span { background:linear-gradient(90deg,var(--accent),var(--accent2));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+}
+.left-desc { font-size:14px; color:var(--muted); line-height:1.7; max-width:380px; margin-bottom:48px; }
+.feature-list { display:flex; flex-direction:column; gap:14px; }
+.feature-item { display:flex; align-items:center; gap:12px; font-size:13px; color:var(--text); }
+.feature-dot { width:8px; height:8px; border-radius:50%; background:var(--accent); flex-shrink:0; }
+.left-footer { margin-top:auto; padding-top:32px; font-size:12px; color:var(--muted); }
+
+/* ── Right: form panel ── */
+.auth-right {
+  background: var(--surface);
+  display: flex; flex-direction:column;
+  min-height: 100vh;
+}
+.auth-right-inner {
+  flex:1; display:flex; flex-direction:column;
+  justify-content:center; padding:48px 40px;
+}
+.auth-title { font-family:var(--heading); font-size:22px; font-weight:800; margin-bottom:6px; letter-spacing:-.5px; }
+.auth-sub { font-size:13px; color:var(--muted); margin-bottom:32px; }
+
+.form-group { margin-bottom:18px; }
+.form-label { display:block; font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.8px; margin-bottom:7px; }
+.form-input {
+  width:100%; background:var(--surface2); border:1px solid var(--border2);
+  border-radius:9px; color:var(--text); font-family:var(--body); font-size:14px;
+  padding:12px 14px; outline:none; transition:border-color .2s, box-shadow .2s;
+}
+.form-input:focus {
+  border-color:rgba(79,142,247,.5);
+  box-shadow:0 0 0 3px rgba(79,142,247,.08);
+}
+.form-input::placeholder { color:var(--muted); }
+
+.pw-wrap { position:relative; }
+.pw-toggle {
+  position:absolute; right:12px; top:50%; transform:translateY(-50%);
+  background:none; border:none; color:var(--muted); cursor:pointer; padding:4px;
+}
+.pw-toggle svg { width:16px; height:16px; display:block; }
+
+.signin-btn {
+  width:100%; padding:13px; margin-top:4px;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  color:#fff; border:none; border-radius:9px;
+  font-family:var(--heading); font-size:15px; font-weight:700;
+  cursor:pointer; transition:opacity .2s, transform .15s;
+  display:flex; align-items:center; justify-content:center; gap:8px;
+}
+.signin-btn:hover:not(:disabled) { opacity:.9; transform:translateY(-1px); }
+.signin-btn:disabled { opacity:.4; cursor:not-allowed; transform:none; }
+
+.error-box {
+  background:rgba(247,90,90,.08); border:1px solid rgba(247,90,90,.25);
+  border-radius:8px; padding:10px 14px; font-size:13px; color:#f8aaaa;
+  margin-bottom:18px; display:none; align-items:center; gap:8px;
+}
+.error-box.show { display:flex; }
+.error-box svg { width:15px; height:15px; flex-shrink:0; }
+
+.divider-row {
+  display:flex; align-items:center; gap:12px; margin:28px 0 24px;
+}
+.divider-line { flex:1; height:1px; background:var(--border); }
+.divider-text { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.8px; flex-shrink:0; }
+
+/* ── Pro upgrade card ── */
+.pro-card {
+  border:1px solid rgba(124,90,247,.35);
+  border-radius:14px; padding:20px;
+  background:linear-gradient(135deg,rgba(79,142,247,.06),rgba(124,90,247,.06));
+  position:relative; overflow:hidden;
+}
+.pro-card::before {
+  content:''; position:absolute; top:-30px; right:-30px;
+  width:100px; height:100px; border-radius:50%;
+  background:radial-gradient(circle,rgba(124,90,247,.15),transparent 70%);
+}
+.pro-badge {
+  display:inline-flex; align-items:center; gap:6px;
+  font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:1px;
+  color:var(--accent2); background:rgba(124,90,247,.12);
+  border:1px solid rgba(124,90,247,.25); border-radius:100px;
+  padding:3px 10px; margin-bottom:12px;
+}
+.pro-title { font-family:var(--heading); font-size:16px; font-weight:700; margin-bottom:6px; }
+.pro-desc { font-size:12px; color:var(--muted); line-height:1.6; margin-bottom:16px; }
+.pro-features { display:flex; flex-direction:column; gap:6px; margin-bottom:18px; }
+.pro-feature { font-size:12px; color:var(--text); display:flex; align-items:center; gap:8px; }
+.pro-feature::before { content:'✓'; color:var(--accent2); font-weight:700; flex-shrink:0; }
+.pro-btn {
+  width:100%; padding:11px; border-radius:9px;
+  background:linear-gradient(90deg,var(--accent2),#9b59f7);
+  color:#fff; border:none; font-family:var(--heading); font-size:13px; font-weight:700;
+  cursor:pointer; transition:opacity .2s, transform .15s;
+  display:flex; align-items:center; justify-content:center; gap:8px; text-decoration:none;
+}
+.pro-btn:hover { opacity:.9; transform:translateY(-1px); }
+
+.auth-footer-row {
+  padding:20px 40px; border-top:1px solid var(--border);
+  font-size:11px; color:var(--muted); text-align:center;
+}
+
+/* pulse dot */
+.pulse-dot { width:7px; height:7px; border-radius:50%; background:var(--safe);
+  animation:pulse 2s infinite; display:inline-block; margin-right:6px; }
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+</style>
+</head>
+<body>
+<div class="glow-orb glow-1"></div>
+<div class="glow-orb glow-2"></div>
+
+<div class="page auth-wrap">
+
+  <!-- ── Left panel ── -->
+  <div class="auth-left">
+    <div class="auth-left-inner">
+      <div class="left-logo">Cyber X-Ray</div>
+      <div class="left-tag">AI-Powered Security Intelligence Platform</div>
+
+      <div class="left-headline">
+        Detect threats<br>before they<br><span>reach you.</span>
+      </div>
+      <div class="left-desc">
+        Cyber X-Ray combines 6 real security tools with AI analysis to identify
+        phishing URLs, malicious emails, fake domains, and attacker infrastructure
+        — in seconds.
+      </div>
+
+      <div class="feature-list">
+        <div class="feature-item"><div class="feature-dot"></div>WHOIS &amp; domain age analysis</div>
+        <div class="feature-item"><div class="feature-dot"></div>DNS record inspection (SPF, DMARC, MX)</div>
+        <div class="feature-item"><div class="feature-dot"></div>IP geolocation &amp; proxy detection</div>
+        <div class="feature-item"><div class="feature-dot"></div>SSL certificate grade (Qualys)</div>
+        <div class="feature-item"><div class="feature-dot"></div>VirusTotal 90+ engine blacklist scan</div>
+        <div class="feature-item"><div class="feature-dot"></div>Real-time URL screenshot (no clicking)</div>
+        <div class="feature-item"><div class="feature-dot" style="background:var(--accent2)"></div>AI phishing analysis with risk scoring</div>
+      </div>
+
+      <div class="left-footer">
+        <span class="pulse-dot"></span>
+        All systems operational &nbsp;·&nbsp; Built by Abdelrahman Fawzy
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Right panel ── -->
+  <div class="auth-right">
+    <div class="auth-right-inner">
+
+      <div class="auth-title">Welcome back</div>
+      <div class="auth-sub">Sign in to your Cyber X-Ray account. Access is granted by the administrator.</div>
+
+      <!-- Error -->
+      <div class="error-box" id="error-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>
+        </svg>
+        <span id="error-text">Invalid credentials.</span>
+      </div>
+
+      <!-- Form -->
+      <div class="form-group">
+        <label class="form-label" for="email">Email Address</label>
+        <input class="form-input" type="email" id="email" placeholder="you@example.com" autocomplete="email"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="password">Password</label>
+        <div class="pw-wrap">
+          <input class="form-input" type="password" id="password" placeholder="••••••••" autocomplete="current-password"/>
+          <button class="pw-toggle" type="button" onclick="togglePw()" title="Show/hide password">
+            <svg id="pw-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <button class="signin-btn" id="signin-btn" onclick="handleSignIn()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+          <polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/>
+        </svg>
+        Sign In
+      </button>
+
+      <!-- Divider -->
+      <div class="divider-row">
+        <div class="divider-line"></div>
+        <div class="divider-text">Want full access?</div>
+        <div class="divider-line"></div>
+      </div>
+
+      <!-- Pro upgrade card -->
+      <div class="pro-card">
+        <div class="pro-badge">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          Pro Account
+        </div>
+        <div class="pro-title">Get Professional Access</div>
+        <div class="pro-desc">Need an account or want to upgrade to a Pro plan with higher scan limits, team management, and priority support?</div>
+        <div class="pro-features">
+          <div class="pro-feature">Unlimited scans & full API access</div>
+          <div class="pro-feature">Team & organization management</div>
+          <div class="pro-feature">Priority support & onboarding</div>
+          <div class="pro-feature">Custom threat report branding</div>
+        </div>
+        <a href="https://www.linkedin.com/in/abdelrahman-fawzyy" target="_blank" class="pro-btn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+            <rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/>
+          </svg>
+          Contact on LinkedIn
+        </a>
+      </div>
+
+    </div>
+
+    <div class="auth-footer-row">
+      Cyber X-Ray &nbsp;·&nbsp; Built by
+      <a href="https://www.linkedin.com/in/abdelrahman-fawzyy" target="_blank"
+         style="color:var(--accent);text-decoration:none">Abdelrahman Fawzy</a>
+      &nbsp;·&nbsp; All rights reserved
+    </div>
+  </div>
+
+</div>
+
+<script type="module">
+import { login, onAuth } from './js/firebase.js';
+
+// Redirect if already logged in
+onAuth(user => {
+  if (!user) return;
+  window.location.href = user.role === 'admin' ? 'admin.html' : 'app.html';
+});
+
+window.togglePw = function() {
+  const inp = document.getElementById('password');
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+};
+
+window.handleSignIn = async function() {
+  const email    = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  const btn      = document.getElementById('signin-btn');
+  const errBox   = document.getElementById('error-box');
+  const errTxt   = document.getElementById('error-text');
+
+  if (!email || !password) {
+    errTxt.textContent = 'Please enter your email and password.';
+    errBox.classList.add('show'); return;
+  }
+
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner" style="width:16px;height:16px;border-width:2px;flex-shrink:0"></div> Signing in…';
+  errBox.classList.remove('show');
+
+  try {
+    const user = await login(email, password);
+    window.location.href = user.role === 'admin' ? 'admin.html' : 'app.html';
+  } catch(e) {
+    let msg = e.message;
+    if (msg.includes('auth/invalid-credential') || msg.includes('auth/wrong-password') || msg.includes('auth/user-not-found'))
+      msg = 'Invalid email or password. Check your credentials.';
+    else if (msg.includes('auth/too-many-requests'))
+      msg = 'Too many failed attempts. Please wait a few minutes.';
+    else if (msg.includes('auth/network-request-failed'))
+      msg = 'Network error. Check your internet connection.';
+    errTxt.textContent = msg;
+    errBox.classList.add('show');
+    btn.disabled = false;
+    btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg> Sign In`;
+  }
+};
+
+document.addEventListener('keydown', e => { if (e.key === 'Enter') window.handleSignIn(); });
+</script>
+</body>
+</html>
