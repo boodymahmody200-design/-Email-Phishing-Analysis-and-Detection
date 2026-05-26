@@ -1,0 +1,14 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "cyber0xray",
+  "compatibility_date": "2026-05-26",
+  "observability": {
+    "enabled": true
+  },
+  "assets": {
+    "directory": "cyber xray-analyzer"
+  },
+  "compatibility_flags": [
+    "nodejs_compat"
+  ]
+}
